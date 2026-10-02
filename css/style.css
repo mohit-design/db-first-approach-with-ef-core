@@ -1,0 +1,102 @@
+/*------- Font Family Starts -------*/
+
+@font-face { font-family: "Roboto-Regular"; src: url("../fonts/Roboto-Regular.ttf"); }
+@font-face { font-family: "Roboto-Medium"; src: url("../fonts/Roboto-Medium.ttf"); }
+@font-face { font-family: "Roboto-SemiBold"; src: url("../fonts/Roboto-SemiBold.ttf"); }
+
+/*------- Font Family Ends -------*/
+
+/*------- Common CSS Starts -------*/
+
+body {
+  font-family: "Roboto-Regular";
+}
+
+/*------- Common CSS Ends -------*/
+
+/*------- Header CSS Starts -------*/
+
+header {
+  background: #E91E63;
+  color: #FFFFFF;
+  padding: 3rem 0;
+}
+header h1 {
+  font-family: "Roboto-SemiBold";
+  font-size: 2rem;
+}
+header p {
+  font-size: 1rem;
+  margin: 0;
+}
+
+/*------- Header CSS Ends -------*/
+
+/*------- Main CSS Starts -------*/
+
+main {
+  padding: 3rem 0 1rem;
+}
+.step {
+  border: 1px solid #E91E63;
+  border-radius: 1rem;
+}
+.step {
+  margin-bottom: 1.5rem;
+  padding: 1.5rem;
+}
+.step h2 {
+  color: #E91E63;
+  font-family: "Roboto-SemiBold";
+  font-size: 1.5rem;
+  margin: 0 0 0.5rem;
+}
+.step h3 {
+  font-size: 1rem;
+}
+.step-number {
+  display: inline-block;
+  margin-bottom: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  background: #E91E63;
+  color: #FFFFFF;
+  font-family: "Roboto-Medium";
+  font-size: 0.75rem;
+}
+code {
+  font-family: "Roboto-Medium";
+}
+pre {
+  background-color: #F1F5F9;
+  border-radius: 0.5rem;
+  color: #1F2937;
+  font-size: 1rem;
+  overflow-x: auto;
+  padding: 18px;
+}
+.inline-code {
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.25rem;
+  background: #f1f5f9;
+  color: #E91E63;
+}
+.package-list {
+  margin-bottom: 0;
+  padding: 0 0 0 1rem;
+}
+.package-list li {
+  margin-bottom: 0.5rem;
+}
+.package-list li:last-child {
+  margin-bottom: 0;
+}
+.package-list strong {
+  display: block;
+  margin-bottom: 4px;
+}
+.url {
+  word-break: break-all;
+}
+
+/*------- Main CSS Ends -------*/

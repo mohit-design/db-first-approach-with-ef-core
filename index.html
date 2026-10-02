@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DB First Approach with EF Core - Hospital Management Software</title>
+    <!-- Bootstrap-5 Minified CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" />
+    <!-- Style CSS -->
+    <link rel="stylesheet" href="css/style.css" type="text/css">
+</head>
+<body>
+<!-- Header Section Starts -->
+<header>
+    <div class="container">
+        <h1>DB First Approach with Entity Framework Core</h1>
+        <p>Reusable setup guide for ASP.NET Core MVC with SQL Server</p>
+    </div>
+</header>
+<!-- Header Section Ends -->
+<!-- Main Section Starts -->
+<main class="container">
+    <section class="step">
+        <span class="step-number">STEP 1</span>
+        <h2>Install SQL Server Management Studio (SSMS)</h2>
+        <p>Link: <a class="url" href="https://learn.microsoft.com/en-us/ssms/install/install" target="_blank" rel="noopener">https://learn.microsoft.com/en-us/ssms/install/install</a></p>
+    </section>
+    <section class="step">
+        <span class="step-number">STEP 2</span>
+        <h2>Install SQL Server Express</h2>
+        <p>Link: <a class="url" href="https://www.microsoft.com/en-us/sql-server/sql-server-downloads" target="_blank" rel="noopener">https://www.microsoft.com/en-us/sql-server/sql-server-downloads</a></p>
+    </section>
+    <section class="step">
+        <span class="step-number">STEP 3</span>
+        <h2>Create the SQL Server Database and Table</h2>
+        <p>Open SSMS, connect to your SQL Server Express instance, open a new query window, and execute the following script.</p>
+        <pre><code>CREATE DATABASE HospitalManagementSoftwareDb;
+GO
+
+USE HospitalManagementSoftwareDb;
+GO
+
+CREATE TABLE Patients
+(
+    -- Primary Key
+    PatientId INT IDENTITY(1,1)
+        CONSTRAINT PK_Patients PRIMARY KEY,
+
+    -- Patient Information
+    FirstName NVARCHAR(100) NOT NULL,
+    LastName NVARCHAR(100) NOT NULL,
+    DateOfBirth DATE NOT NULL,
+    Gender NVARCHAR(20) NOT NULL,
+
+    -- Record Creation Date
+    CreatedAt DATETIME2(0) NOT NULL
+        CONSTRAINT DF_Patients_CreatedAt
+        DEFAULT (SYSUTCDATETIME()),
+
+    -- Gender Validation
+    CONSTRAINT CK_Patients_Gender
+        CHECK (Gender IN ('Male', 'Female', 'Other')),
+
+    -- Date of Birth Validation
+    CONSTRAINT CK_Patients_DateOfBirth
+        CHECK (DateOfBirth &lt;= CAST(SYSUTCDATETIME() AS DATE))
+);
+GO
+
+INSERT INTO dbo.Patients
+(
+    FirstName,
+    LastName,
+    DateOfBirth,
+    Gender
+)
+VALUES
+('Amit', 'Shah', '1995-04-10', 'Male'),
+('Priya', 'Patel', '1998-08-22', 'Female'),
+('Rahul', 'Mehta', '1990-12-05', 'Male'),
+('Neha', 'Desai', '2001-03-15', 'Female'),
+('Karan', 'Joshi', '1987-06-18', 'Male'),
+('Pooja', 'Sharma', '1996-11-30', 'Female'),
+('Rohan', 'Trivedi', '2003-01-25', 'Male'),
+('Anjali', 'Parmar', '1992-09-12', 'Female'),
+('Vikas', 'Patel', '1985-02-28', 'Male'),
+('Sneha', 'Shah', '2000-07-07', 'Female');
+GO
+
+SELECT * FROM Patients;</code></pre>
+        <p class="mb-1"><strong>Note:</strong></p>
+        <div class="note">
+            <strong>IDENTITY(1,1):</strong> SQL Server automatically generates the <span class="inline-code">PatientId</span>.
+            You do not need to manually insert the patient ID.
+        </div>
+    </section>
+    <section class="step">
+        <span class="step-number">STEP 4</span>
+        <h2>Create a New ASP.NET Core MVC Project</h2>
+        <ol>
+            <li>Open Visual Studio.</li>
+            <li>Select <strong>Create a new project</strong>.</li>
+            <li>Select <strong>ASP.NET Core Web App (Model-View-Controller)</strong>.</li>
+            <li>Enter your project name.</li>
+            <li>Select the required .NET version.</li>
+            <li>Create the project.</li>
+        </ol>
+    </section>
+    <section class="step">
+        <span class="step-number">STEP 5</span>
+        <h2>Install Required EF Core Packages</h2>
+        <p>Open: <strong>Tools → NuGet Package Manager → Manage NuGet Packages for Solution</strong></p>
+        <ol class="package-list">
+            <li>
+                <strong>Microsoft.EntityFrameworkCore</strong>
+            </li>
+            <li>
+                <strong>Microsoft.EntityFrameworkCore.SqlServer</strong>
+            </li>
+            <li>
+                <strong>Microsoft.EntityFrameworkCore.Tools</strong>
+            </li>
+            <li>
+                <strong>Microsoft.EntityFrameworkCore.Design</strong>
+            </li>
+        </ol>
+    </section>
+    <section class="step">
+        <span class="step-number">STEP 6</span>
+        <h2>Scaffold the Database</h2>
+        <p>Open: <strong>Tools → NuGet Package Manager → Package Manager Console</strong></p>
+        <h3><strong>First time scaffolding</strong></h3>
+        <pre><code>Scaffold-DbContext "Server=.\SQLEXPRESS;Database=HospitalManagementSoftwareDb;Trusted_Connection=True;TrustServerCertificate=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -ContextDir Data -Context HospitalManagementSoftwareDbContext -NoOnConfiguring -DataAnnotations</code></pre>
+        <h3><strong>Scaffolding again after database changes</strong></h3>
+        <pre><code>Scaffold-DbContext "Server=.\SQLEXPRESS;Database=HospitalManagementSoftwareDb;Trusted_Connection=True;TrustServerCertificate=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -ContextDir Data -Context HospitalManagementSoftwareDbContext -NoOnConfiguring -DataAnnotations -Force</code></pre>
+        <h3><strong>Generated structure</strong></h3>
+        <pre class="mb-0"><code>YourProject
+│
+├── Data
+│   └── HospitalManagementSoftwareDbContext.cs
+│
+├── Models
+│   └── Patient.cs
+│
+├── Controllers
+├── Views
+├── appsettings.json
+└── Program.cs</code></pre>
+    </section>
+    <section class="step">
+        <span class="step-number">STEP 7</span>
+        <h2>Add the Connection String</h2>
+        <p>Open <strong>appsettings.json</strong> and add the connection string inside the root JSON object.</p>
+        <pre><code>{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "ConnectionStrings": {
+    "HospitalManagementSoftwareDb": "Server=.\\SQLEXPRESS;Database=HospitalManagementSoftwareDb;Trusted_Connection=True;TrustServerCertificate=True;"
+  },
+  "AllowedHosts": "*"
+}</code></pre>
+        <div class="note">
+            The connection string name is <strong>HospitalManagementSoftwareDb</strong>.
+            This exact name will be used in <span class="inline-code">Program.cs</span>.
+        </div>
+    </section>
+    <section class="step">
+        <span class="step-number">STEP 8</span>
+        <h2>Register the DbContext in Program.cs</h2>
+        <p>First, make sure these namespaces are available:</p>
+        <pre><code>using Microsoft.EntityFrameworkCore;
+using YourProjectName.Data;</code></pre>
+        <p>Then register your DbContext in <strong>Program.cs</strong>:</p>
+        <pre><code>builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext&lt;HospitalManagementSoftwareDbContext&gt;(options => options.UseSqlServer(builder.Configuration.GetConnectionString("HospitalManagementSoftwareDb")));</code></pre>
+    </section>
+</main>
+<!-- Main Section Starts -->
+</body>
+</html>
