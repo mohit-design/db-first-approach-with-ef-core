@@ -33,7 +33,7 @@
     <section class="step">
         <span class="step-number">STEP 3</span>
         <h2>Create the SQL Server Database and Table</h2>
-        <p>Open SSMS, connect to your SQL Server Express instance, open a new query window, and execute the following script.</p>
+        <p class="mb-4">Open SSMS, connect to your SQL Server Express instance, open a new query window, and execute the following script.</p>
         <pre><code>CREATE DATABASE HospitalManagementSoftwareDb;
 GO
 
@@ -88,7 +88,7 @@ VALUES
 GO
 
 SELECT * FROM Patients;</code></pre>
-        <p class="mb-1"><strong>Note:</strong></p>
+        <p class="mt-4 mb-1"><strong>Note:</strong></p>
         <div>
             <strong>IDENTITY(1,1):</strong> SQL Server automatically generates the <span class="inline-code">PatientId</span>.
             You do not need to manually insert the patient ID.
@@ -97,7 +97,7 @@ SELECT * FROM Patients;</code></pre>
     <section class="step">
         <span class="step-number">STEP 4</span>
         <h2>Create a New ASP.NET Core MVC Project</h2>
-        <ol>
+        <ol class="mb-0 ps-3">
             <li>Open Visual Studio.</li>
             <li>Select <strong>Create a new project</strong>.</li>
             <li>Select <strong>ASP.NET Core Web App (Model-View-Controller)</strong>.</li>
@@ -109,30 +109,30 @@ SELECT * FROM Patients;</code></pre>
     <section class="step">
         <span class="step-number">STEP 5</span>
         <h2>Install Required EF Core Packages</h2>
-        <p>Open: <strong>Tools → NuGet Package Manager → Manage NuGet Packages for Solution</strong></p>
+        <p class="mb-3">Open: <strong>Tools → NuGet Package Manager → Manage NuGet Packages for Solution</strong></p>
         <ol class="package-list">
             <li>
-                <strong>Microsoft.EntityFrameworkCore</strong>
+                Microsoft.EntityFrameworkCore
             </li>
             <li>
-                <strong>Microsoft.EntityFrameworkCore.SqlServer</strong>
+                Microsoft.EntityFrameworkCore.SqlServer
             </li>
             <li>
-                <strong>Microsoft.EntityFrameworkCore.Tools</strong>
+                Microsoft.EntityFrameworkCore.Tools
             </li>
             <li>
-                <strong>Microsoft.EntityFrameworkCore.Design</strong>
+                Microsoft.EntityFrameworkCore.Design
             </li>
         </ol>
     </section>
     <section class="step">
         <span class="step-number">STEP 6</span>
         <h2>Scaffold the Database</h2>
-        <p>Open: <strong>Tools → NuGet Package Manager → Package Manager Console</strong></p>
+        <p class="mb-3">Open: <strong>Tools → NuGet Package Manager → Package Manager Console</strong></p>
         <h3><strong>First time scaffolding</strong></h3>
-        <pre><code>Scaffold-DbContext "Server=.\SQLEXPRESS;Database=HospitalManagementSoftwareDb;Trusted_Connection=True;TrustServerCertificate=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -ContextDir Data -Context HospitalManagementSoftwareDbContext -NoOnConfiguring -DataAnnotations</code></pre>
+        <pre class="mb-4"><code>Scaffold-DbContext "Server=.\SQLEXPRESS;Database=HospitalManagementSoftwareDb;Trusted_Connection=True;TrustServerCertificate=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -ContextDir Data -Context HospitalManagementSoftwareDbContext -NoOnConfiguring -DataAnnotations</code></pre>
         <h3><strong>Scaffolding again after database changes</strong></h3>
-        <pre><code>Scaffold-DbContext "Server=.\SQLEXPRESS;Database=HospitalManagementSoftwareDb;Trusted_Connection=True;TrustServerCertificate=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -ContextDir Data -Context HospitalManagementSoftwareDbContext -NoOnConfiguring -DataAnnotations -Force</code></pre>
+        <pre class="mb-4"><code>Scaffold-DbContext "Server=.\SQLEXPRESS;Database=HospitalManagementSoftwareDb;Trusted_Connection=True;TrustServerCertificate=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -ContextDir Data -Context HospitalManagementSoftwareDbContext -NoOnConfiguring -DataAnnotations -Force</code></pre>
         <h3><strong>Generated structure</strong></h3>
         <pre><code>YourProject
 │
@@ -150,7 +150,7 @@ SELECT * FROM Patients;</code></pre>
     <section class="step">
         <span class="step-number">STEP 7</span>
         <h2>Add the Connection String</h2>
-        <p>Open <strong>appsettings.json</strong> and add the connection string inside the root JSON object.</p>
+        <p class="mb-3">Open <strong>appsettings.json</strong> and add the connection string inside the root JSON object.</p>
         <pre><code>{
   "Logging": {
     "LogLevel": {
@@ -170,32 +170,32 @@ SELECT * FROM Patients;</code></pre>
     </section>
     <section class="step">
         <span class="step-number">STEP 8</span>
-        <h2>Register the DbContext in Program.cs</h2>
+        <h2 class="mb-3">Register the DbContext in Program.cs</h2>
         <p>First, make sure these namespaces are available:</p>
         <pre><code>using Microsoft.EntityFrameworkCore;
 using YourProjectName.Data;</code></pre>
-        <p>Then register your DbContext in <strong>Program.cs</strong>:</p>
+        <p class="mt-4">Then register your DbContext in <strong>Program.cs</strong>:</p>
         <pre><code>builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext&lt;HospitalManagementSoftwareDbContext&gt;(options => options.UseSqlServer(builder.Configuration.GetConnectionString("HospitalManagementSoftwareDb")));</code></pre>
     </section>
     <section class="step">
         <span class="step-number">STEP 9</span>
-        <h2>Create Patients Controller</h2>
-        <h3>Controller Location</h3>
+        <h2>Create Patient Controller</h2>
+        <h3 class="mt-4"><strong>Controller Location</strong></h3>
         <pre><code>Controllers
-    └── PatientsController.cs</code></pre>
-        <h3><strong>PatientsController.cs</strong></h3>
+    └── PatientController.cs</code></pre>
+        <h3 class="mt-4"><strong>PatientController.cs</strong></h3>
         <pre><code>using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HospitalManagementSoftware.Data;
 
 namespace HospitalManagementSoftware.Controllers;
 
-public class PatientsController : Controller
+public class PatientController : Controller
 {
     private readonly HospitalManagementSoftwareDbContext _context;
 
-    public PatientsController(HospitalManagementSoftwareDbContext context)
+    public PatientController(HospitalManagementSoftwareDbContext context)
     {
         _context = context;
     }
@@ -210,19 +210,16 @@ public class PatientsController : Controller
     </section>
     <section class="step">
         <span class="step-number">STEP 10</span>
-        <h2>Create the Patients View</h2>
-        <p>
-            Create an <strong>Index.cshtml</strong> file inside the Patients View folder.
-        </p>
-        <h3>View Location</h3>
+        <h2>Create the Patient View</h2>
+        <p class="mb-3">Create an <strong>Index.cshtml</strong> file inside the Patient View folder.</p>
+        <h3><strong>View Location</strong></h3>
         <pre><code>Views
-    └── Patients
+    └── Patient
         └── Index.cshtml</code></pre>
     </section>
     <section class="step">
         <span class="step-number">STEP 15</span>
         <h2>Display Patient Data in the View</h2>
-        <p>Use a <strong>foreach</strong> loop to display each patient record.</p>
         <pre><code>@model IEnumerable&lt;HospitalManagementSoftware.Models.Patient&gt;
 
 @{
@@ -261,10 +258,10 @@ public class PatientsController : Controller
     <section class="step">
         <span class="step-number">STEP 17</span>
         <h2>Run and Test the READ Operation</h2>
-        <p>Run the ASP.NET Core MVC application.</p>
-        <p>Open:</p>
-        <pre><code>https://localhost:xxxx/Patients</code></pre>
-        <h3>Expected Result</h3>
+        <p class="mb-3">Run the ASP.NET Core MVC application.</p>
+        <p><strong>Open:</strong></p>
+        <pre><code>https://localhost:xxxx/Patient</code></pre>
+        <h3 class="mt-4"><strong>Expected Result</strong></h3>
         <pre><code>---------------------------------------------------------------
     Patient ID | First Name | Last Name | Date of Birth | Gender
     ---------------------------------------------------------------
