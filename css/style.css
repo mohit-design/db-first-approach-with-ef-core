@@ -72,6 +72,7 @@ pre {
   border-radius: 0.5rem;
   color: #1F2937;
   font-size: 1rem;
+  margin-bottom: 0;
   overflow-x: auto;
   padding: 18px;
 }
