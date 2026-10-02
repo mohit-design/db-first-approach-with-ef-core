@@ -89,7 +89,7 @@ GO
 
 SELECT * FROM Patients;</code></pre>
         <p class="mb-1"><strong>Note:</strong></p>
-        <div class="note">
+        <div>
             <strong>IDENTITY(1,1):</strong> SQL Server automatically generates the <span class="inline-code">PatientId</span>.
             You do not need to manually insert the patient ID.
         </div>
@@ -134,7 +134,7 @@ SELECT * FROM Patients;</code></pre>
         <h3><strong>Scaffolding again after database changes</strong></h3>
         <pre><code>Scaffold-DbContext "Server=.\SQLEXPRESS;Database=HospitalManagementSoftwareDb;Trusted_Connection=True;TrustServerCertificate=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -ContextDir Data -Context HospitalManagementSoftwareDbContext -NoOnConfiguring -DataAnnotations -Force</code></pre>
         <h3><strong>Generated structure</strong></h3>
-        <pre class="mb-0"><code>YourProject
+        <pre><code>YourProject
 │
 ├── Data
 │   └── HospitalManagementSoftwareDbContext.cs
@@ -163,7 +163,7 @@ SELECT * FROM Patients;</code></pre>
   },
   "AllowedHosts": "*"
 }</code></pre>
-        <div class="note">
+        <div class="mt-4">
             The connection string name is <strong>HospitalManagementSoftwareDb</strong>.
             This exact name will be used in <span class="inline-code">Program.cs</span>.
         </div>
@@ -177,6 +177,102 @@ using YourProjectName.Data;</code></pre>
         <p>Then register your DbContext in <strong>Program.cs</strong>:</p>
         <pre><code>builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext&lt;HospitalManagementSoftwareDbContext&gt;(options => options.UseSqlServer(builder.Configuration.GetConnectionString("HospitalManagementSoftwareDb")));</code></pre>
+    </section>
+    <section class="step">
+        <span class="step-number">STEP 9</span>
+        <h2>Create Patients Controller</h2>
+        <h3>Controller Location</h3>
+        <pre><code>Controllers
+    └── PatientsController.cs</code></pre>
+        <h3><strong>PatientsController.cs</strong></h3>
+        <pre><code>using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using HospitalManagementSoftware.Data;
+
+namespace HospitalManagementSoftware.Controllers;
+
+public class PatientsController : Controller
+{
+    private readonly HospitalManagementSoftwareDbContext _context;
+
+    public PatientsController(HospitalManagementSoftwareDbContext context)
+    {
+        _context = context;
+    }
+
+    public async Task&lt;IActionResult&gt; Index()
+    {
+        var patients = await _context.Patients.ToListAsync();
+        return View(patients);
+    }
+}
+</code></pre>
+    </section>
+    <section class="step">
+        <span class="step-number">STEP 10</span>
+        <h2>Create the Patients View</h2>
+        <p>
+            Create an <strong>Index.cshtml</strong> file inside the Patients View folder.
+        </p>
+        <h3>View Location</h3>
+        <pre><code>Views
+    └── Patients
+        └── Index.cshtml</code></pre>
+    </section>
+    <section class="step">
+        <span class="step-number">STEP 15</span>
+        <h2>Display Patient Data in the View</h2>
+        <p>Use a <strong>foreach</strong> loop to display each patient record.</p>
+        <pre><code>@model IEnumerable&lt;HospitalManagementSoftware.Models.Patient&gt;
+
+@{
+    ViewData["Title"] = "Patients";
+}
+
+&lt;h1&gt;Patients&lt;/h1&gt;
+
+&lt;table class="table"&gt;
+    &lt;thead&gt;
+        &lt;tr&gt;
+            &lt;th&gt;Patient ID&lt;/th&gt;
+            &lt;th&gt;First Name&lt;/th&gt;
+            &lt;th&gt;Last Name&lt;/th&gt;
+            &lt;th&gt;Date of Birth&lt;/th&gt;
+            &lt;th&gt;Gender&lt;/th&gt;
+            &lt;th&gt;Created At&lt;/th&gt;
+        &lt;/tr&gt;
+    &lt;/thead&gt;
+
+    &lt;tbody&gt;
+        @foreach (var patient in Model)
+        {
+            &lt;tr&gt;
+                &lt;td&gt;@patient.PatientId&lt;/td&gt;
+                &lt;td&gt;@patient.FirstName&lt;/td&gt;
+                &lt;td&gt;@patient.LastName&lt;/td&gt;
+                &lt;td&gt;@patient.DateOfBirth.ToString("dd/MM/yyyy")&lt;/td&gt;
+                &lt;td&gt;@patient.Gender&lt;/td&gt;
+                &lt;td&gt;@patient.CreatedAt&lt;/td&gt;
+            &lt;/tr&gt;
+        }
+    &lt;/tbody&gt;
+&lt;/table&gt;</code></pre>
+    </section>
+    <section class="step">
+        <span class="step-number">STEP 17</span>
+        <h2>Run and Test the READ Operation</h2>
+        <p>Run the ASP.NET Core MVC application.</p>
+        <p>Open:</p>
+        <pre><code>https://localhost:xxxx/Patients</code></pre>
+        <h3>Expected Result</h3>
+        <pre><code>---------------------------------------------------------------
+    Patient ID | First Name | Last Name | Date of Birth | Gender
+    ---------------------------------------------------------------
+    1          | Amit       | Shah      | 10/04/1995    | Male
+    2          | Priya      | Patel     | 22/08/1998    | Female
+    3          | Rahul      | Mehta     | 05/12/1990    | Male
+    ...
+    ---------------------------------------------------------------</code></pre>
     </section>
 </main>
 <!-- Main Section Starts -->
