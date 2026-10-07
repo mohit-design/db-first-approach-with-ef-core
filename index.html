@@ -171,17 +171,17 @@ SELECT * FROM Patients;</code></pre>
     <section class="step">
         <span class="step-number">STEP 8</span>
         <h2 class="mb-3">Register the DbContext in Program.cs</h2>
-        <p>First, make sure these namespaces are available:</p>
+        <p class="mb-3">First, make sure these <strong>namespaces</strong> are available:</p>
         <pre><code>using Microsoft.EntityFrameworkCore;
 using YourProjectName.Data;</code></pre>
-        <p class="mt-4">Then register your DbContext in <strong>Program.cs</strong>:</p>
+        <p class="mt-4 mb-3">Then register your DbContext in <strong>Program.cs</strong>:</p>
         <pre><code>builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext&lt;HospitalManagementSoftwareDbContext&gt;(options => options.UseSqlServer(builder.Configuration.GetConnectionString("HospitalManagementSoftwareDb")));</code></pre>
     </section>
     <section class="step">
         <span class="step-number">STEP 9</span>
         <h2>Create Patient Controller</h2>
-        <h3 class="mt-4"><strong>Controller Location</strong></h3>
+        <h3 class="mt-3"><strong>Controller Location</strong></h3>
         <pre><code>Controllers
     └── PatientController.cs</code></pre>
         <h3 class="mt-4"><strong>PatientController.cs</strong></h3>
@@ -219,7 +219,7 @@ public class PatientController : Controller
     </section>
     <section class="step">
         <span class="step-number">STEP 15</span>
-        <h2>Display Patient Data in the View</h2>
+        <h2 class="mb-3">Display Patient Data in the View</h2>
         <pre><code>@model IEnumerable&lt;HospitalManagementSoftware.Models.Patient&gt;
 
 @{
